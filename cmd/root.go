@@ -2,25 +2,22 @@ package cmd
 
 import (
 	"fmt"
-	"io"
-	"net/http"
 	"os"
 
+	fetch "github.com/codingpierogi/gurl/pkg"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
 	Use: "gurl",
 	Run: func(cmd *cobra.Command, args []string) {
-		res, err := http.Get(args[0])
+		body, err := fetch.Body(args[0])
+
 		if err != nil {
-			fmt.Printf("Error making request to ")
+			fmt.Printf("Error making request")
 		}
-		defer res.Body.Close()
 
-		body, _ := io.ReadAll(res.Body)
-
-		fmt.Print(string(body))
+		fmt.Print(body)
 	},
 }
 
