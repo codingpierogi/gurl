@@ -7,7 +7,12 @@ import (
 )
 
 func Body(url string) (string, error) {
-	res, err := http.Get(url)
+	client := http.DefaultClient
+	req, err := http.NewRequest("GET", url, )
+
+	req.Header.Add("user-agent", "curl/7.68.0")
+	
+	res, err := client.Get(url)
 
 	// > GET / HTTP/2
 	// > Host : www.google.com
@@ -21,14 +26,20 @@ func Body(url string) (string, error) {
 	// < cache-control: private, max-age=0
 	// < content-type: text/html; charset=ISO-8859-1
 	// <
-	fmt.Println(res.Request.URL.Opaque)
-	// for n, v := range res.Request{
-	// 	fmt.Println(n, v)
-	// }
-	fmt.Printf("> GET %s \n", res.Request.Proto)
-	fmt.Printf("> Host: %s \n", res.Request.Host)
-	fmt.Printf("> user-agent: %s \n", res.Request.UserAgent())
-	fmt.Printf("> accept: %s \n", res.Request.Header["Accept"])
+
+	fmt.Println(res.Request.URL.EscapedPath())
+
+	fmt.Printf("> GET %s %s\n", res.Request.URL.Path, res.Request.Proto)
+	fmt.Printf("> Host: %s\n", res.Request.Host)
+	fmt.Printf("> user-agent: %s\n", res.Request.UserAgent())
+	fmt.Printf("> accept: %s\n", res.Request.Header["Accept"])
+	fmt.Println(">")
+	fmt.Printf("< %s %d\n", res.Proto, res.StatusCode)
+	fmt.Printf("< date: %s\n", res.Header.Get("date"))
+	fmt.Printf("< expires: %s\n", res.Header.Get("expires"))
+	fmt.Printf("< cache-control: %s\n", res.Header.Get("cache-control"))
+	fmt.Printf("< content-type: %s\n", res.Header.Get("content-type"))
+	fmt.Println("<")
 
 	if err != nil {
 		return "", err
