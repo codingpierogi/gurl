@@ -15,13 +15,13 @@ var rootCmd = &cobra.Command{
 	Short: "Golang curl",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		_, err := fetch.Body(args[0])
+		body, err := fetch.Body(args[0], fetch.Options{Verbose: Verbose})
 
 		if err != nil {
 			fmt.Printf("Error making request")
 		}
 
-		//fmt.Print(body)
+		fmt.Print(body)
 	},
 }
 
