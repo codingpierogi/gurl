@@ -7,7 +7,8 @@ import (
 )
 
 type Options struct {
-	Verbose bool
+	UserAgent string
+	Verbose   bool
 }
 
 func Body(url string, options Options) (string, error) {
@@ -18,7 +19,9 @@ func Body(url string, options Options) (string, error) {
 		return "", err
 	}
 
-	req.Header.Add("user-agent", "curl/7.68.0")
+	if options.UserAgent != "" {
+		req.Header.Add("user-agent", options.UserAgent)
+	}
 	req.Header.Add("accept", "*/*")
 
 	res, err := client.Do(req)
