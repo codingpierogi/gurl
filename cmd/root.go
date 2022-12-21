@@ -9,13 +9,18 @@ import (
 )
 
 var Verbose bool
+var UserAgent string
 
 var rootCmd = &cobra.Command{
 	Use:   "gurl",
 	Short: "Golang curl",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := fetch.Body(args[0], fetch.Options{Verbose: Verbose, UserAgent: "curl/7.68.0"})
+		options := fetch.Options{
+			Verbose:   Verbose,
+			UserAgent: UserAgent,
+		}
+		body, err := fetch.Body(args[0], options)
 
 		if err != nil {
 			fmt.Printf("Error making request")
@@ -34,4 +39,5 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "Make the operation more talkative")
+	rootCmd.PersistentFlags().StringVarP(&UserAgent, "user-agent", "A", "curl/7.68.0", "Send User-Agent <name> to server")
 }
