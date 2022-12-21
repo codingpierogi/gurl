@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	fetch "github.com/codingpierogi/gurl/pkg"
+	"github.com/codingpierogi/gurl/pkg/fetch"
 	"github.com/spf13/cobra"
 )
 
