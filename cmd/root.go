@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var Output string
+var Output []string
 var Verbose bool
 var UserAgent string
 
@@ -21,8 +21,14 @@ var rootCmd = &cobra.Command{
 			Verbose:   Verbose,
 			UserAgent: UserAgent,
 		}
-		body, _ := fetch.Body(args[0], options)
-		print.Body(Output, body)
+		for i, arg := range args {
+			body, _ := fetch.Body(arg, options)
+			if i < len(Output) {
+				print.Body(Output[i], body)
+			} else {
+				print.Body("", body)
+			}
+		}
 	},
 }
 
@@ -34,7 +40,7 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&Output, "output", "o", "", "Write to file instead of stdout")
+	rootCmd.PersistentFlags().StringSliceVarP(&Output, "output", "o", []string{""}, "Write to file instead of stdout")
 	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "Make the operation more talkative")
 	rootCmd.PersistentFlags().StringVarP(&UserAgent, "user-agent", "A", "curl/7.68.0", "Send User-Agent <name> to server")
 }
