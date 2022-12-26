@@ -22,11 +22,11 @@ var rootCmd = &cobra.Command{
 			UserAgent: UserAgent,
 		}
 		for i, arg := range args {
-			body, _ := fetch.Body(arg, options)
+			result := <-fetch.Body(arg, options)
 			if i < len(Output) {
-				print.Body(Output[i], body)
+				print.Body(Output[i], result.Value)
 			} else {
-				print.Body("", body)
+				print.Body("", result.Value)
 			}
 		}
 	},
