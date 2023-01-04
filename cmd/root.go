@@ -3,8 +3,8 @@ package cmd
 import (
 	"os"
 
+	"github.com/codingpierogi/gurl/pkg/curl"
 	"github.com/codingpierogi/gurl/pkg/fetch"
-	"github.com/codingpierogi/gurl/pkg/print"
 	"github.com/spf13/cobra"
 )
 
@@ -21,14 +21,7 @@ var rootCmd = &cobra.Command{
 			Verbose:   Verbose,
 			UserAgent: UserAgent,
 		}
-		for i, arg := range args {
-			result := <-fetch.Body(arg, options)
-			if i < len(Output) {
-				print.Body(Output[i], result.Value)
-			} else {
-				print.Body("", result.Value)
-			}
-		}
+		curl.Run(args, Output, options)
 	},
 }
 
